@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import sys
 from read_config import read_config
