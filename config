@@ -1,0 +1,3 @@
+fit_input_dir    = correlations2/
+fit_output_dir   = fit_output/
+atlas_data_dir   = data_from_atlas/
