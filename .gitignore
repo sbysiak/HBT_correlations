@@ -1,6 +1,7 @@
 *.o
 *.so
 *.lib
+*.pyc
 
 *.tar
 *.tgz
@@ -12,8 +13,18 @@
 
 *.root
 *.copy
+#*.txt
+*.tmp
+
 *.ini
 !hbtfit.ini
 
-therm2/**
-!therm2/build/src/therm2_hbtfit.cxx
+*Graph.py
+!/txt2rootGraph.py
+
+therm2/*
+!therm2/build
+therm2/build/*
+!therm2/build/src
+therm2/build/src/*
+!therm2/build/src/therm2_hbtfit/cxx
