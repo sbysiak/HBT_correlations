@@ -3,7 +3,7 @@ import os
 import sys
 
 def read_config(cfile='config'):
-    params = ['fit_input_dir', 'fit_output_dir']
+    params = ['fit_input_dir', 'fit_output_dir_core', 'atlas_data_dir', 'centrality']
     configuration = dict( zip(params, ['']*len(params)) )
     if os.path.exists(cfile):
         with open(cfile) as file:
@@ -13,19 +13,22 @@ def read_config(cfile='config'):
                 for param in configuration.keys():
                     if line.startswith(param):
                         value = line.split('=')[1].strip()
-                        if not value.endswith('/'): value = value+'/'
+                        #if not value.endswith('/'): value = value+'/'
                         configuration[param] = value
                         break
                 new_param_name, value = line.split('=')
                 new_param_name, value = new_param_name.strip(), value.strip()
                 if new_param_name in configuration.keys(): continue
-                if not value.endswith('/'): value = value+'/'
+                #if not value.endswith('/'): value = value+'/'
                 print 'new param: {} with value: {}'.format(new_param_name, value)
                 configuration[new_param_name] = value
     else:
-         print 'WARNING: no config file'
+         print 'ERROR: no config file'
          sys.exit()
 
+    configuration['fit_output_dir'] = ( 'cent'+configuration['centrality']+'/'+
+                                        configuration['fit_output_dir_core']+
+                                        '_reject'+configuration['rejection']+'/' )
 
     print configuration
     return configuration

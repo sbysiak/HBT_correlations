@@ -13,6 +13,14 @@ var_fig_dict = dict(zip(var_lst,fig_lst))
 if len(sys.argv) > 1: configuration = read_config(sys.argv[1])
 else: configuration = read_config()
 atlas_dir = configuration['atlas_data_dir']
+therm_dir = configuration['fit_output_dir'] 
+centrality = configuration['centrality']
+rejection = configuration['rejection']
+
+therm_dir_low  = therm_dir.replace('reject'+rejection, 'reject002')
+therm_dir_med  = therm_dir.replace('reject'+rejection, 'reject0025')
+therm_dir_high = therm_dir.replace('reject'+rejection, 'reject003')
+
 
 
 for var,fig in zip(var_lst,fig_lst):
@@ -21,9 +29,9 @@ for var,fig in zip(var_lst,fig_lst):
     # # #
     # therminator2 graph
     # # #
-    f2 = open('fit_out_reject002/'+var+'.dat')
-    f25 = open('fit_out_reject0025/'+var+'.dat')
-    f3 = open('fit_out_reject003/'+var+'.dat')
+    f2  = open(therm_dir_low  +var+'.dat')
+    f25 = open(therm_dir_med  +var+'.dat')
+    f3  = open(therm_dir_high +var+'.dat')
     
     val2, val25, val3 = [],[],[]
     rapid = [-2,-1,0,1,2]
@@ -58,7 +66,7 @@ for var,fig in zip(var_lst,fig_lst):
     # ATLAS graph
     # # #
     x_lst,y_lst = [],[]
-    file = open(atlas_dir+'fig_'+fig+'_err.dat')
+    file = open(atlas_dir+'fig_'+fig+'_cent'+centrality+'.dat')
     for line in file:
         if line.startswith('#'): continue
         if len(line.split()) < 2: continue
@@ -90,11 +98,11 @@ for var,fig in zip(var_lst,fig_lst):
     # # #
     # save to file
     # # #
-    rootfile = ROOT.TFile('therm_atlas_comparision/fig_'+fig+'.root', 'RECREATE')
+    rootfile = ROOT.TFile('therm_atlas_comparision/fig_'+fig+'.root', 'UPDATE')
 
-    therm_graph.SetName('therm2')
+    therm_graph.SetName('therm2'+centrality)
     therm_graph.Write() 
-    atlas_graph.SetName('atlas')
+    atlas_graph.SetName('atlas'+centrality)
     atlas_graph.Write()
 
     del(therm_graph)

@@ -2,6 +2,7 @@
 *.so
 *.lib
 *.pyc
+*.swp
 
 *.tar
 *.tgz
@@ -13,18 +14,18 @@
 
 *.root
 *.copy
-#*.txt
+*.txt
 *.tmp
 
 *.ini
 !hbtfit.ini
 
-*Graph.py
-!/txt2rootGraph.py
+ARCHIVE/*
 
+# adds therm2_hbtfit.cxx as only modified file from original therm2
 therm2/*
 !therm2/build
 therm2/build/*
 !therm2/build/src
 therm2/build/src/*
-!therm2/build/src/therm2_hbtfit/cxx
+!therm2/build/src/therm2_hbtfit.cxx
