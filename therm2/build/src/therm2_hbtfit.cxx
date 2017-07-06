@@ -69,7 +69,6 @@ void		preparepad();
 void		preparehist(TH1D *hist, int type);
 TH1D*		getproj(TH3D *numq, TH3D *denq, int nproj, int wbin, double norm);
 Double_t	fungek(Double_t *x, Double_t *par);
-//Double_t	fungekOrReject(Double_t *x, Double_t *par, Double_t *rejectRange);
 Double_t	fungekOrReject(Double_t *x, Double_t *par);
 int		GetFitParameter(TString aKeyword, Double_t *parval, Int_t *isfixed, Double_t *parmin, Double_t *parmax);
 void		MessageIntro();
@@ -91,7 +90,7 @@ int main(int argc, char **argv)
   Double_t parmax[Npar]; 
   Double_t maxrange;
   Double_t maxx=0.0, maxy=0.0, maxz=0.0;
-  Double_t rejectRange;
+
   TString  numname;
   TString  denname;
   
@@ -160,7 +159,6 @@ int main(int argc, char **argv)
    GetFitParameter("Routlong" ,&pars[4], &dofix[4], &parmin[4], &parmax[4]);
    GetFitParameter("RejectRange" ,&pars[5], &dofix[5], &parmin[5], &parmax[5]);
     maxrange = sMainConfig->GetParameter("MaxFitRange").Atof();
-    rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
     numname  = sMainConfig->GetParameter("Numerator");
     denname  = sMainConfig->GetParameter("Denominator");
   }
@@ -178,7 +176,7 @@ int main(int argc, char **argv)
   }
 
   cout << "MaxFitRange = " << maxrange <<endl;
-  cout << "rejectRange = +/-" << rejectRange <<"  <- through sMainConfig->GetParameter " << endl;
+
   
   CopyINIFile();
 // ##############################################################
@@ -236,7 +234,7 @@ int main(int argc, char **argv)
     else
       funqk->SetParameter(iter, pars[iter]);
 
-  cout << "rejection range = " << funqk->GetParameter(Npar-1) <<"  <-funqk->GetParameter(5), set through GetFitParameter() "<< endl;
+  //cout << "rejection range = " << funqk->GetParameter(Npar-1) <<"  <-funqk->GetParameter(5), set through GetFitParameter() "<< endl;
   
   tInRootFile = new TFile(tInRootName);
   numq = new TH3D(*((TH3D *) tInRootFile->Get(numname)));
@@ -686,17 +684,15 @@ Double_t fungek(Double_t *x, Double_t *par)
   Double_t gpart;
   gpart = exp(-TMath::Sqrt((pow(par[1]*qo+par[4]*ql,2) + pow(par[2]*qs,2) + pow(par[3]*ql+par[4]*qo,2))/0.038938));  // ATLAS Eucl norm
   //Double_t gpart = exp(-(TMath::Abs(par[2]*qo+par[5]*ql) + TMath::Abs(par[3]*qs) + TMath::Abs(par[4]*ql+par[5]*qo)));// ATLAS Manh norm
-  
   //gpart = exp((-par[2]*par[2]*qosq-par[3]*par[3]*qssq-par[4]*par[4]*qlsq)/0.038938);  // old  
-
   //return (par[0] * (1 + lam*gpart));
+
   return (1 + lam*gpart);
 }
 
 
 Double_t fungekOrReject(Double_t *x, Double_t *par){
   Double_t rejectRange = par[5];
-  //cout << "rejection range = " << rejectRange <<"  <- in fungekOrReject, through GetFitParameter() "<< endl;
   Double_t lLim = -rejectRange;
   Double_t rLim = rejectRange;
   if ( reject && ((x[0] > lLim && x[0] < rLim) || (x[1] > lLim && x[1] < rLim) || (x[2] > lLim && x[2] < rLim)) ){

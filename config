@@ -1,9 +1,9 @@
-fit_input_dir    = correlations2/
-
-# fit_output_dir = 'cent'<centrality>'/'<fit_output_dir_core>'_reject'<rejection>
-# matters only in txt2rootGraph.py
+# these should end with slash "/":
+fit_input_dir    = correlations_c01/
+atlas_data_dir   = data_from_atlas/
 
 fit_output_dir_core = fit_out
 centrality = 01
 rejection = 002
-atlas_data_dir   = data_from_atlas/
+# fit_output_dir = 'cent'<centrality>'/'<fit_output_dir_core>'_reject'<rejection>
+
