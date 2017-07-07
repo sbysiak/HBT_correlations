@@ -9,9 +9,9 @@ it contains:
 * scripts running fits and plotting against data collected by ATLAS in automatic way
 
 
-### usage:
+## usage:
 
-##### manually:
+#### manually:
 Scripts should be executed in following order:
 ```
 $ python run_fits.py
@@ -31,39 +31,39 @@ $ python txt2rootGraph
 ```
 which writes output to ROOT format.
 
-##### automatically:
+#### automatically:
 To run fits and convert results with uncertainties into ROOT format:
 ```sh
 $ python get_therm_results
 ```
 
-##### comparision with ATLAS:
+#### comparision with ATLAS:
 In order to plot results against ATLAS data:
-```python
+```sh
 $ root
 ```
 and in ROOT:
-```sh
-root [0]  .L get_therm_results
-root [1]  get_therm_results("01")
+```
+root [0]  .L hbtCompareAll.C
+root [1]  hbtCompareAll("01")
 ```
 where "01" is centrality 0-1%.
 
-### Input format:
-##### therminator:
-correlations_c01/
-|-- m0505
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root
-|-- m1505
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root
-|-- m1zero
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi2a.root
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi3a.root
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi4a.root
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi5a.root
+## Input format:
+#### therminator:
+correlations_c01/\
+|-- m0505\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root\
+|-- m1505\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root\
+|-- m1zero\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi1a.root\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi2a.root\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi3a.root\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi4a.root\
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-- femtopipi5a.root\
 
-##### ATLAS data
+#### ATLAS data
 File name format: "fig_23a_cent01.dat", which corresponds to figure 23 a) in ATLAS paper, centrality 0-1%.
 Each file should contain coordinates for points (middles), upper-left and lower-right edges of uncertainties boxes (x-y), e.g.
 ```
