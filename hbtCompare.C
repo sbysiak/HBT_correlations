@@ -162,21 +162,21 @@ else if (MODE == "VSy34"){
 
 else if (MODE == "VSkt34"){
    TH1D* hist = StyleHistoVSkt(ymin, ymax, yTitle);
-   hist->SetMinimum(-0.25);
-   hist->SetMaximum(0.3);
+   hist->SetMinimum(0);
+   hist->SetMaximum(0.15);
    hist->Draw(); 
   
-    double legLeftPos = 0.58;
-    double legBottomPos = 0.24;
+    double legLeftPos = 0.25;
+    double legBottomPos = 0.185;
     double sysLabelLeftPos = 0.24;
-    double sysLabelBottomPos = 0.27;
-    double rangeLabelLeftPos = 0.56;
-    double rangeLabelBottomPos = 0.4;
+    double sysLabelBottomPos = 0.36;
+    double rangeLabelLeftPos = 0.67;
+    double rangeLabelBottomPos = 0.23;
 
-	tex = new TLatex(rangeLabelLeftPos,rangeLabelBottomPos, "0.2 < #it{k_{T}} < 0.3 GeV");
+	tex = new TLatex(rangeLabelLeftPos,rangeLabelBottomPos, "-1 < #it{y_{#pi#pi}} < 0");
 	tex->SetNDC(kTRUE);
 	tex->SetTextSize(0.055);
-	tex->SetLineWidth(2);
+	tex->SetLineWidth(1);
 	tex->Draw();
 }
 
@@ -215,30 +215,31 @@ else if (MODE == "VSkt34"){
    tex->Draw();
 
  // atlas
- TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
-   oo->SetNDC(kTRUE);
-   oo->SetMarkerStyle(21);
-   oo->SetMarkerColorAlpha(atlas->GetMarkerColor(),0.5);
-   oo->SetMarkerSize(2);
-   oo->Draw();
- TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
-   oo->SetNDC(kTRUE);
-   oo->SetMarkerStyle(25);
-   oo->SetMarkerColorAlpha(atlas->GetMarkerColor(),0.8);
-   oo->SetMarkerSize(2);
-   oo->Draw();
- TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
-   oo->SetNDC(kTRUE);
-   oo->SetMarkerStyle(atlas->GetMarkerStyle());
-   oo->SetMarkerColor(atlas->GetMarkerColor());
-   oo->SetMarkerSize(atlas->GetMarkerSize());
-   oo->Draw();
- tex = new TLatex(legLeftPos+0.04,legBottomPos-0.025,"ATLAS data");
-   tex->SetNDC(kTRUE);
-   tex->SetTextSize(0.06);
-   tex->SetLineWidth(2);
-   tex->Draw();
-
+ if (MODE != "VSkt34"){
+	 TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
+	   oo->SetNDC(kTRUE);
+	   oo->SetMarkerStyle(21);
+	   oo->SetMarkerColorAlpha(atlas->GetMarkerColor(),0.5);
+	   oo->SetMarkerSize(2);
+	   oo->Draw();
+	 TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
+	   oo->SetNDC(kTRUE);
+	   oo->SetMarkerStyle(25);
+	   oo->SetMarkerColorAlpha(atlas->GetMarkerColor(),0.8);
+	   oo->SetMarkerSize(2);
+	   oo->Draw();
+	 TMarker* oo = new TMarker(legLeftPos+0.01,legBottomPos,atlas->GetMarkerStyle());
+	   oo->SetNDC(kTRUE);
+	   oo->SetMarkerStyle(atlas->GetMarkerStyle());
+	   oo->SetMarkerColor(atlas->GetMarkerColor());
+	   oo->SetMarkerSize(atlas->GetMarkerSize());
+	   oo->Draw();
+	 tex = new TLatex(legLeftPos+0.04,legBottomPos-0.025,"ATLAS data");
+	   tex->SetNDC(kTRUE);
+	   tex->SetTextSize(0.06);
+	   tex->SetLineWidth(2);
+	   tex->Draw();
+ }
 
 
 

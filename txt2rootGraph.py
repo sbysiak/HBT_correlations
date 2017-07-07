@@ -9,7 +9,7 @@ def txt2rootGraph(configuration, rejection_lst=['002', '0025', '003']):
     """
 
     fig_lst = ['23a', '23b', '24a', '24b', '25a', '25b', '29a', '29b', '34a', '34_kt']
-    var_lst = ['rout_m1zero', 'rout_1a', 'rside_m1zero', 'rside_1a', 'rlong_m1zero', 'rlong_1a', 'lambda_m1zero', 'lambda_1a', 'routlong_m1zero', 'routlong_1a']
+    var_lst = ['rout_m1zero', 'rout_1a', 'rside_m1zero', 'rside_1a', 'rlong_m1zero', 'rlong_1a', 'lambda_m1zero', 'lambda_1a', 'routlong_1a', 'routlong_m1zero']
 
     fig_var_dict = dict(zip(fig_lst,var_lst))
     var_fig_dict = dict(zip(var_lst,fig_lst))
@@ -52,7 +52,8 @@ def txt2rootGraph(configuration, rejection_lst=['002', '0025', '003']):
         
         therm_graph = ROOT.TGraphAsymmErrors(len(val25))
         
-        if '1a' in var or var == 'routlong_m1zero': 
+
+        if '1a' in var: 
             xaxis = rapid
             xerr = 0.5 
         else: 
