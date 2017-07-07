@@ -62,14 +62,13 @@ TF3     *funqg;
 TF3     *funqk;
 TGraph  *kcoul;
 
-Bool_t reject = kTRUE;
-
 void		getfitprojc(TH3D *expden, TH3D **projhist);
 void		preparepad();
 void		preparehist(TH1D *hist, int type);
 TH1D*		getproj(TH3D *numq, TH3D *denq, int nproj, int wbin, double norm);
 Double_t	fungek(Double_t *x, Double_t *par);
 Double_t	fungekOrReject(Double_t *x, Double_t *par);
+Double_t	fungekOrReject2Sided(Double_t *x, Double_t *par);
 int		GetFitParameter(TString aKeyword, Double_t *parval, Int_t *isfixed, Double_t *parmin, Double_t *parmax);
 void		MessageIntro();
 void		MessageHelp();
@@ -82,13 +81,14 @@ int main(int argc, char **argv)
  
   TDatime  tDate;
   TString  tInRootName;
-  Int_t Npar = 6;
+  Int_t Npar = 5;
 
   Int_t    dofix[Npar];  
   Double_t pars[Npar];
   Double_t parmin[Npar];
   Double_t parmax[Npar]; 
   Double_t maxrange;
+  Double_t rejectRange;
   Double_t maxx=0.0, maxy=0.0, maxz=0.0;
 
   TString  numname;
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
    GetFitParameter("Rside" ,&pars[2], &dofix[2], &parmin[2], &parmax[2]);
    GetFitParameter("Rlong" ,&pars[3], &dofix[3], &parmin[3], &parmax[3]);
    GetFitParameter("Routlong" ,&pars[4], &dofix[4], &parmin[4], &parmax[4]);
-   GetFitParameter("RejectRange" ,&pars[5], &dofix[5], &parmin[5], &parmax[5]);
+    rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
     maxrange = sMainConfig->GetParameter("MaxFitRange").Atof();
     numname  = sMainConfig->GetParameter("Numerator");
     denname  = sMainConfig->GetParameter("Denominator");
@@ -176,6 +176,7 @@ int main(int argc, char **argv)
   }
 
   cout << "MaxFitRange = " << maxrange <<endl;
+  cout << "RejectRange = " << rejectRange <<endl;
 
   
   CopyINIFile();
@@ -214,7 +215,7 @@ int main(int argc, char **argv)
 
   PRINT_MESSAGE("["<<sTimeStamp<<"]\tFitting.");
 
-  funqg = new TF3("funqgOrReject", fungekOrReject, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
+  funqg = new TF3("funqgOrReject2Sided", fungekOrReject2Sided, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
   if (maxx > 0)
     funqg->SetRange(0, 0, 0, maxx, maxy, maxz);
   else
@@ -255,20 +256,20 @@ int main(int argc, char **argv)
   tOutTextName = sEventDir + "hbtradii.txt";
   tOutTextFile = new ofstream(tOutTextName, ios_base::app);
   (*tOutTextFile) << "["<<sTimeStamp<<"]\t" << tInRootName << endl;
-  (*tOutTextFile) << "Lambda " << fabs(funqk->GetParameter(0)) << " +/- " <<fabs(funqk->GetParError(1)) << endl;
-  (*tOutTextFile) << "Rout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(2)) << endl;
-  (*tOutTextFile) << "Rside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(3)) << endl;
-  (*tOutTextFile) << "Rlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(4)) << endl;
-  (*tOutTextFile) << "Routlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(5)) << endl;
+  (*tOutTextFile) << "Lambda " << fabs(funqk->GetParameter(0)) << " +/- " <<fabs(funqk->GetParError(0)) << endl;
+  (*tOutTextFile) << "Rout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(1)) << endl;
+  (*tOutTextFile) << "Rside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(2)) << endl;
+  (*tOutTextFile) << "Rlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(3)) << endl;
+  (*tOutTextFile) << "Routlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)) << endl;
   tOutTextFile->close();
   delete tOutTextFile;
 
   PRINT_DEBUG_1("Fit results:");
-  PRINT_DEBUG_1("\tlambda " << fabs(funqk->GetParameter(0)) << " +/- " <<fabs(funqk->GetParError(1)));
-  PRINT_DEBUG_1("\tRout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(2)));
-  PRINT_DEBUG_1("\tRside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(3)));
-  PRINT_DEBUG_1("\tRlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(4)));
-  PRINT_DEBUG_1("\tRoutlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(5)));
+  PRINT_DEBUG_1("\tlambda " << fabs(funqk->GetParameter(0)) << " +/- " <<fabs(funqk->GetParError(0)));
+  PRINT_DEBUG_1("\tRout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(1)));
+  PRINT_DEBUG_1("\tRside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(2)));
+  PRINT_DEBUG_1("\tRlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(3)));
+  PRINT_DEBUG_1("\tRoutlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)));
  
 // ##############################################################
 // # Make plots							#
@@ -692,10 +693,27 @@ Double_t fungek(Double_t *x, Double_t *par)
 
 
 Double_t fungekOrReject(Double_t *x, Double_t *par){
-  Double_t rejectRange = par[5];
-  Double_t lLim = -rejectRange;
-  Double_t rLim = rejectRange;
-  if ( reject && ((x[0] > lLim && x[0] < rLim) || (x[1] > lLim && x[1] < rLim) || (x[2] > lLim && x[2] < rLim)) ){
+  Double_t rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
+  Double_t rejectRangeSq = rejectRange*rejectRange;
+  if ( (x[0]*x[0] < rejectRangeSq) || (x[1]*x[1] < rejectRangeSq) || (x[2]*x[2] < rejectRangeSq) ){
+      TF1::RejectPoint();
+      return 0;
+  }
+  else{
+      return fungek(x, par);
+  }
+}
+
+Double_t fungekOrReject2Sided(Double_t *x, Double_t *par){
+  Double_t maxrange = sMainConfig->GetParameter("MaxFitRange").Atof();
+  Double_t rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
+
+  Double_t qosq = x[0]*x[0];
+  Double_t qssq = x[1]*x[1];
+  Double_t qlsq = x[2]*x[2];
+  Double_t qLength3d = TMath::Sqrt(qosq + qssq + qlsq);
+
+  if ( qLength3d < rejectRange || qLength3d > maxrange ){
       TF1::RejectPoint();
       return 0;
   }
