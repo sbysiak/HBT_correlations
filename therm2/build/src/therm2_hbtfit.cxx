@@ -67,7 +67,8 @@ void		preparepad();
 void		preparehist(TH1D *hist, int type);
 TH1D*		getproj(TH3D *numq, TH3D *denq, int nproj, int wbin, double norm);
 Double_t	fungek(Double_t *x, Double_t *par);
-Double_t	fungekOrReject(Double_t *x, Double_t *par);
+Double_t	fungekOrRejectSquare(Double_t *x, Double_t *par);
+Double_t	fungekOrReject1Sided(Double_t *x, Double_t *par);
 Double_t	fungekOrReject2Sided(Double_t *x, Double_t *par);
 int		GetFitParameter(TString aKeyword, Double_t *parval, Int_t *isfixed, Double_t *parmin, Double_t *parmax);
 void		MessageIntro();
@@ -215,7 +216,11 @@ int main(int argc, char **argv)
 
   PRINT_MESSAGE("["<<sTimeStamp<<"]\tFitting.");
 
-  funqg = new TF3("funqgOrReject2Sided", fungekOrReject2Sided, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
+  // rejecting function selection:
+  //funqg = new TF3("fungekOrRejectSquare", fungekOrRejectSquare, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
+  //funqg = new TF3("fungekOrReject1Sided", fungekOrReject1Sided, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
+  funqg = new TF3("fungekOrReject2Sided", fungekOrReject2Sided, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, Npar);
+
   if (maxx > 0)
     funqg->SetRange(0, 0, 0, maxx, maxy, maxz);
   else
@@ -691,8 +696,8 @@ Double_t fungek(Double_t *x, Double_t *par)
   return (1 + lam*gpart);
 }
 
-
-Double_t fungekOrReject(Double_t *x, Double_t *par){
+Double_t fungekOrRejectSquare(Double_t *x, Double_t *par){
+  // rejects points of which ANY of coordinates' abs is less than RejectRange
   Double_t rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
   Double_t rejectRangeSq = rejectRange*rejectRange;
   if ( (x[0]*x[0] < rejectRangeSq) || (x[1]*x[1] < rejectRangeSq) || (x[2]*x[2] < rejectRangeSq) ){
@@ -704,7 +709,27 @@ Double_t fungekOrReject(Double_t *x, Double_t *par){
   }
 }
 
+Double_t fungekOrReject1Sided(Double_t *x, Double_t *par){
+  // rejects points from inside of SPHERE of size equal to RejectRange
+  Double_t rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
+
+  Double_t qosq = x[0]*x[0];
+  Double_t qssq = x[1]*x[1];
+  Double_t qlsq = x[2]*x[2];
+  Double_t qLength3d = TMath::Sqrt(qosq + qssq + qlsq);
+
+  if ( qLength3d < rejectRange){
+      TF1::RejectPoint();
+      return 0;
+  }
+  else{
+      return fungek(x, par);
+  }
+}
+
 Double_t fungekOrReject2Sided(Double_t *x, Double_t *par){
+  // rejects points from inside of SPHERE of size equal to RejectRange
+  // AND points from outside of SPHERE of size equal to MaxFitRange
   Double_t maxrange = sMainConfig->GetParameter("MaxFitRange").Atof();
   Double_t rejectRange = sMainConfig->GetParameter("RejectRange").Atof();
 
