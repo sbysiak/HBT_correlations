@@ -265,7 +265,7 @@ int main(int argc, char **argv)
   (*tOutTextFile) << "Rout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(1)) << endl;
   (*tOutTextFile) << "Rside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(2)) << endl;
   (*tOutTextFile) << "Rlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(3)) << endl;
-  (*tOutTextFile) << "Routlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)) << endl;
+  (*tOutTextFile) << "Routlong  " << (funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)) << endl;
   tOutTextFile->close();
   delete tOutTextFile;
 
@@ -274,7 +274,7 @@ int main(int argc, char **argv)
   PRINT_DEBUG_1("\tRout   " << fabs(funqk->GetParameter(1)) << " +/- " <<fabs(funqk->GetParError(1)));
   PRINT_DEBUG_1("\tRside  " << fabs(funqk->GetParameter(2)) << " +/- " <<fabs(funqk->GetParError(2)));
   PRINT_DEBUG_1("\tRlong  " << fabs(funqk->GetParameter(3)) << " +/- " <<fabs(funqk->GetParError(3)));
-  PRINT_DEBUG_1("\tRoutlong  " << fabs(funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)));
+  PRINT_DEBUG_1("\tRoutlong  " << (funqk->GetParameter(4)) << " +/- " <<fabs(funqk->GetParError(4)));
  
 // ##############################################################
 // # Make plots							#
