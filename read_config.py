@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import os
 import sys
+from datetime import datetime
 
 def read_config(cfile='config'):
-    params = ['fit_input_dir', 'fit_output_dir_core', 'atlas_data_dir', 'centrality', 'rejection']
+    params = ['fit_input_dir', 'fit_output_dir_core', 'atlas_data_dir', 'centrality', 'rejection', 'reject_func', 'max_fit_range']
     params_with_slash = ['fit_input_dir', 'atlas_data_dir']
     configuration = dict( zip(params, ['']*len(params)) )
     if os.path.exists(cfile):
@@ -32,7 +33,12 @@ def read_config(cfile='config'):
 
     configuration['fit_output_dir'] = ( 'cent'+configuration['centrality']+'/'+
                                         configuration['fit_output_dir_core']+
-                                        '_reject'+configuration['rejection']+'/' )
+                                        '_reject_'+configuration['reject_func']+
+                                        '_'+configuration['rejection']+'/' )
+
+    now = datetime.now()
+    configuration['hbtfit_ini_file'] = 'tmp_hbtfit.ini.'+now.strftime('%d%b_%H%M%S')
+    os.system('cp hbtfit.ini '+configuration['hbtfit_ini_file'])
 
     print 'loaded configuration:\n',configuration
     return configuration

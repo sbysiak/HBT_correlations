@@ -2,10 +2,13 @@
 fit_input_dir    = correlations_c01/
 atlas_data_dir   = data_from_atlas/
 
-fit_output_dir_core = fitout
+fit_output_dir_core = fitout_MaxFitRange030
+
 centrality = 01
 rejection = 002
+max_fit_range = 03
+
 # options: square / 1sided / 2sided
-reject_func = square
+reject_func = 2sided
 # fit_output_dir = 'cent'<centrality>'/'<fit_output_dir_core>'_reject_'<reject_func>'_'<rejection>
 

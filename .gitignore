@@ -2,7 +2,7 @@
 *.so
 *.lib
 *.pyc
-*.py~
+*~
 *.swp
 
 *.tar
@@ -20,6 +20,7 @@
 
 *.ini
 !hbtfit.ini
+tmp_hbtfit*
 
 ARCHIVE/*
 
