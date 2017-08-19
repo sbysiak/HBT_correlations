@@ -6,24 +6,31 @@ from read_config import read_config
 
 def collect_data(configuration):
     """
-    hbtradii.txt contains all parameters values for particular kt and rapidity
+    hbtradii.txt contains all fit parameters (e.g. R_out, R_side) values 
+    for particular kt and rapidity
     function searches for all values of selected parameter and kt OR rapidity
-    and writes them to files < variable_name >_< kt/rapidity >
+    and writes them to files < parameter_name >_< kt/rapidity >
     """
 
     var_lst = ['lambda', 'rout', 'rside', 'rlong', 'routlong']
     kt_lst = ['1a', '2a', '3a', '4a', '5a', '6a']
-    rapid_lst = ['m2515', 'm1505','m1zero', 'm0505', 'p0515', 'p1525']
+    #rapid_lst = ['m2515', 'm1505','m1zero', 'm0505', 'p0515', 'p1525']  // old division
+    rapid_lst = ['m25m2', 'm2m15', 'm15m1', 'm1m05', 'm05m0', 
+                 'p0p05', 'p05p1', 'p1p15', 'p15p2', 'p2p25',  
+                 'm1zero'] 
+
 
     def parse(datafile):
         with open(datafile) as data:
             for line in data:
                 if '.root' in line:
+                    # headers
                     tmp=line.split(']')[1]
                     rapid = tmp.split('/')[-2].strip()
                     kt = tmp.split('/')[-1].replace('.root', '').replace('femtopipi','').strip()
                     print 'rapid, kt: ', rapid, kt
                 elif '+/-' in line:
+                    # lines with numerical values
                     var = line.split()[0].lower() # var=lambda,rout ...
                     mean = line.split()[1] 
                     std = line.split()[3]

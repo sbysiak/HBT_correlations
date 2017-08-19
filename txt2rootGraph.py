@@ -9,7 +9,11 @@ def txt2rootGraph(configuration, rejection_lst=['002', '0025', '003']):
     """
 
     fig_lst = ['23a', '23b', '24a', '24b', '25a', '25b', '29a', '29b', '34a', '34_kt']
-    var_lst = ['rout_m1zero', 'rout_1a', 'rside_m1zero', 'rside_1a', 'rlong_m1zero', 'rlong_1a', 'lambda_m1zero', 'lambda_1a', 'routlong_1a', 'routlong_m1zero']
+    var_lst = ['rout_m1zero', 'rout_1a', 
+               'rside_m1zero', 'rside_1a', 
+               'rlong_m1zero', 'rlong_1a', 
+               'lambda_m1zero', 'lambda_1a', 
+               'routlong_1a', 'routlong_m1zero']
 
     fig_var_dict = dict(zip(fig_lst,var_lst))
     var_fig_dict = dict(zip(var_lst,fig_lst))
@@ -20,9 +24,10 @@ def txt2rootGraph(configuration, rejection_lst=['002', '0025', '003']):
     centrality = configuration['centrality']
     rejection = configuration['rejection']
 
-    therm_dir_low  = therm_dir.replace('reject'+rejection, 'reject'+rejection_lst[0])
-    therm_dir_med  = therm_dir.replace('reject'+rejection, 'reject'+rejection_lst[1])
-    therm_dir_high = therm_dir.replace('reject'+rejection, 'reject'+rejection_lst[2])
+    
+    therm_dir_low  = therm_dir.replace('_'+rejection, '_'+rejection_lst[0])
+    therm_dir_med  = therm_dir.replace('_'+rejection, '_'+rejection_lst[1])
+    therm_dir_high = therm_dir.replace('_'+rejection, '_'+rejection_lst[2])
 
 
 
@@ -37,25 +42,34 @@ def txt2rootGraph(configuration, rejection_lst=['002', '0025', '003']):
         f3  = open(therm_dir_high +var+'.dat')
         
         val2, val25, val3 = [],[],[]
-        rapid = [-2,-1,0,1,2]
-        kt = [0.25, 0.35, 0.45, 0.55, 0.65, 0.75]
+        #rapid = [-2,-1,0,1,2] # old division
+        rapid = [-2.25, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, 2.25]
+        kt = [0.25, 0.35, 0.45, 0.55, 0.65, 0.75]  
         
         for file,vals in zip([f2,f25,f3], [val2,val25,val3]):
+            print file
             for line in file:
                 if 'zero' in line: continue
                 v = float(line.split()[1].strip())
                 vals.append(v)
             file.close()
-
-        assert len(val2) == len(val25)
-        assert len(val2) == len(val3)
+        try: 
+            assert len(val2) == len(val25)
+            assert len(val2) == len(val3)
+        except AssertionError as err:
+            print err
+            print 'real lengths'
+            for val in [val2, val25, val3]:
+                print len(val)
+            raise AssertionError
         
         therm_graph = ROOT.TGraphAsymmErrors(len(val25))
         
 
         if '1a' in var: 
             xaxis = rapid
-            xerr = 0.5 
+            #xerr = 0.5  # old division
+            xerr = 0.25 
         else: 
             xaxis = kt
             xerr = 0.05

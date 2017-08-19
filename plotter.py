@@ -14,6 +14,8 @@ def plot(configuration, datafile, figfile):
     centrality = configuration['centrality'] 
     rejection = configuration['rejection'] 
 
+     
+
 
     if not datafile.startswith(fit_output_dir ): datafile = fit_output_dir + datafile
     if not datafile.endswith('.dat'): datafile = datafile+'.dat'
@@ -28,12 +30,23 @@ def plot(configuration, datafile, figfile):
                '4a':(0.5,0.6),
                '5a':(0.6,0.7),
                '6a':(0.7,0.8)}
-    rapid_dict = {'m2515':(-2.5,-1.5), 
-                  'm1505':(-1.5, -0.5),
-                  'm1zero':(-1., 0.0), 
-                  'm0505':(-0.5, 0.5), 
-                  'p0515':(0.5,1.5), 
-                  'p1525':(1.5,2.5)}
+#    rapid_dict = {'m2515':(-2.5,-1.5), 
+#                  'm1505':(-1.5, -0.5),
+#                  'm1zero':(-1., 0.0), 
+#                  'm0505':(-0.5, 0.5), 
+#                  'p0515':(0.5,1.5), 
+#                  'p1525':(1.5,2.5)} # old division
+    rapid_dict = {'m25m2':(-2.5,-2.0), 
+                  'm2m15':(-2.0,-1.5),
+                  'm15m1':(-1.5,-1.0), 
+                  'm1m05':(-1.0,-0.5),
+                  'm05m0':(-0.5,-0.0), 
+                  'p0p05':(0.0,0.5),
+                  'p05p1':(0.5,1.0),
+                  'p1p15':(1.0,1.5), 
+                  'p15p2':(1.5,2.0), 
+                  'p2p25':(2.0,2.5),  
+                  'm1zero':(-1.0,0.0)  }
 
 
     atlasx, atlasy = [],[]
@@ -110,7 +123,7 @@ def plot(configuration, datafile, figfile):
     #plt.show()        
     plt.savefig(outfile)
     plt.close()
-    plt.close('all')
+    #plt.close('all')
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

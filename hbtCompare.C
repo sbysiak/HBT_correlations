@@ -143,7 +143,7 @@ else if (MODE == "VSy"){
 else if (MODE == "VSy34"){
    TH1D* hist = StyleHistoVSy(ymin, ymax, yTitle);
    hist->SetMinimum(-0.25);
-   hist->SetMaximum(0.3);
+   hist->SetMaximum(0.35);
    hist->Draw(); 
   
     double legLeftPos = 0.58;
@@ -163,7 +163,7 @@ else if (MODE == "VSy34"){
 else if (MODE == "VSkt34"){
    TH1D* hist = StyleHistoVSkt(ymin, ymax, yTitle);
    hist->SetMinimum(0);
-   hist->SetMaximum(0.15);
+   hist->SetMaximum(0.2);
    hist->Draw(); 
   
     double legLeftPos = 0.25;
